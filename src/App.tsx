@@ -95,9 +95,13 @@ function App() {
             Move down
           </button>
           <br />
-          {playerState.x}
+          pos x: {playerState.x}
           <br />
-          {playerState.y}
+          pos y: {playerState.y}
+          <br />
+          speedX: {playerState.speedX}
+          <br />
+          speedY: {playerState.speedY}
         </div>
       </div>
     </div>

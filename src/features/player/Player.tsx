@@ -10,7 +10,13 @@ import useInterval from "../interval/useInterval";
 import { KeyboardControls } from "../keyboardControls/KeyboardControls";
 import { selectPressedKeys } from "../keyboardControls/keyboardControlsSlice";
 import { selectObstacles } from "../obstacle/obstaclesSlice";
-import { moveDown, selectPlayer } from "./playerSlice";
+import {
+  addXSpeed,
+  moveDown,
+  moveLeft,
+  moveRight,
+  selectPlayer,
+} from "./playerSlice";
 
 export function Player() {
   const dispatch = useAppDispatch();
@@ -31,6 +37,38 @@ export function Player() {
       dispatch(moveDown());
     }
   };
+
+  // Accelerating
+  useInterval(() => {
+    if (
+      (pressedKeys.includes("ArrowRight") && playerState.speedX < 0) ||
+      (pressedKeys.includes("ArrowLeft") && playerState.speedX > 0) ||
+      (!pressedKeys.includes("ArrowRight") &&
+        !pressedKeys.includes("ArrowLeft"))
+    ) {
+      if (playerState.speedX > 0) {
+        dispatch(addXSpeed(playerState.speedX - 5 < 0 ? -1 : -5));
+      }
+      if (playerState.speedX < 0) {
+        dispatch(addXSpeed(playerState.speedX + 5 > 0 ? 1 : 5));
+      }
+    }
+    if (pressedKeys.includes("ArrowLeft")) {
+      dispatch(addXSpeed(playerState.speedX > -30 ? -30 : -5));
+    }
+    if (pressedKeys.includes("ArrowRight")) {
+      dispatch(addXSpeed(playerState.speedX < 30 ? 30 : 5));
+    }
+  }, 50);
+
+  // Speed
+  useInterval(() => {
+    if (playerState.speedX < 0) {
+      dispatch(moveLeft());
+    } else if (playerState.speedX > 0) {
+      dispatch(moveRight());
+    }
+  }, 1000 / Math.abs(playerState.speedX));
 
   // Gravity
   useInterval(() => {
