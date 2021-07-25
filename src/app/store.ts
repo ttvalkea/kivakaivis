@@ -1,9 +1,11 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import playerReducer from '../features/player/playerSlice';
+import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+import playerSlice from "../features/player/playerSlice";
+import obstaclesSlice from "../features/obstacle/obstaclesSlice";
 
 export const store = configureStore({
   reducer: {
-    player: playerReducer,
+    player: playerSlice,
+    obstacles: obstaclesSlice,
   },
 });
 

@@ -1,18 +1,18 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { RootState } from '../../app/store';
+import { createSlice } from "@reduxjs/toolkit";
+import { RootState } from "../../app/store";
+import renderedObject from "../../classes/renderedObject";
 
-export interface PlayerState {
-  x: number;
-  y: number;
-}
+export interface PlayerState extends renderedObject {}
 
 const initialState: PlayerState = {
   x: 0,
-  y: 0
+  y: 0,
+  width: 20,
+  height: 20,
 };
 
 export const playerSlice = createSlice({
-  name: 'counter',
+  name: "player",
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
@@ -21,13 +21,18 @@ export const playerSlice = createSlice({
     },
     moveRight: (state) => {
       state.x += 1;
-    }
-  }
+    },
+    moveUp: (state) => {
+      state.y -= 1;
+    },
+    moveDown: (state) => {
+      state.y += 1;
+    },
+  },
 });
 
-export const { moveLeft, moveRight } = playerSlice.actions;
+export const { moveLeft, moveRight, moveUp, moveDown } = playerSlice.actions;
 
-export const selectX = (state: RootState) => state.player.x;
-export const selectY = (state: RootState) => state.player.y;
+export const selectPlayer = (state: RootState): renderedObject => state.player;
 
 export default playerSlice.reducer;
