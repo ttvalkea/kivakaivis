@@ -7,6 +7,8 @@ import {
 } from "../../constants";
 import { areColliding } from "../gameMechanics/gameMechanics";
 import useInterval from "../interval/useInterval";
+import { KeyboardControls } from "../keyboardControls/KeyboardControls";
+import { selectPressedKeys } from "../keyboardControls/keyboardControlsSlice";
 import { selectObstacles } from "../obstacle/obstaclesSlice";
 import { moveDown, selectPlayer } from "./playerSlice";
 
@@ -14,6 +16,7 @@ export function Player() {
   const dispatch = useAppDispatch();
   const playerState = useAppSelector(selectPlayer);
   const obstaclesState = useAppSelector(selectObstacles);
+  const pressedKeys = useAppSelector(selectPressedKeys);
   const fall = () => {
     // If there's no obstacle under the player, move down one
     let isColliding = false;
@@ -29,6 +32,7 @@ export function Player() {
     }
   };
 
+  // Gravity
   useInterval(() => {
     fall();
   }, 50);
@@ -42,6 +46,9 @@ export function Player() {
         marginTop: SCREEN_HEIGHT / 2 - PLAYER_HEIGHT / 2,
         marginLeft: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
       }}
-    ></div>
+    >
+      <KeyboardControls />
+      <i>{pressedKeys}</i>
+    </div>
   );
 }
