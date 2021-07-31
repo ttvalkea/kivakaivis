@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { doesItemHaveAnObstacleOnASide } from "../gameMechanics/gameMechanics";
+import { selectObstacles } from "../obstacle/obstaclesSlice";
 import { selectPlayer, setCanJump, setYSpeed } from "../player/playerSlice";
 import { selectPressedKeys, setPressedKeys } from "./keyboardControlsSlice";
 
@@ -8,6 +10,7 @@ export const KeyboardControls = () => {
   const keyboardControlsState = useAppSelector(selectPressedKeys);
   const pressedKeys = useAppSelector(selectPressedKeys);
   const playerState = useAppSelector(selectPlayer);
+  const obstaclesState = useAppSelector(selectObstacles);
 
   useEffect(() => {
     const ALLOWED_KEYS = [
@@ -25,7 +28,11 @@ export const KeyboardControls = () => {
       }
 
       // Jumping
-      if (key === "Shift" && playerState.canJump) {
+      if (
+        key === "Shift" &&
+        playerState.canJump &&
+        doesItemHaveAnObstacleOnASide(playerState, obstaclesState, "bottom")
+      ) {
         dispatch(setCanJump(false));
         dispatch(setYSpeed(playerState.speedY - 20));
       }
@@ -43,7 +50,13 @@ export const KeyboardControls = () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
     };
-  }, [pressedKeys, dispatch, keyboardControlsState, playerState]);
+  }, [
+    pressedKeys,
+    dispatch,
+    keyboardControlsState,
+    playerState,
+    obstaclesState,
+  ]);
 
   return <span></span>;
 };

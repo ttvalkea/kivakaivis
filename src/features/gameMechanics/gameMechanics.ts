@@ -11,3 +11,47 @@ export const areColliding = (
     item1.y + item1.height > item2.y
   );
 };
+
+export const doesItemHaveAnObstacleOnASide = (
+  item: renderedObject,
+  obstacles: renderedObject[],
+  side: "top" | "bottom" | "left" | "right"
+): boolean => {
+  // Check if there's an obstacle on a certain side of an item
+  for (let index = 0; index < obstacles.length; index++) {
+    const obstacle = obstacles[index];
+    let checkedObjectXPositionDifference = 0;
+    let checkedObjectYPositionDifference = 0;
+
+    switch (side) {
+      case "top":
+        checkedObjectYPositionDifference = -1;
+        break;
+      case "bottom":
+        checkedObjectYPositionDifference = 1;
+        break;
+      case "left":
+        checkedObjectXPositionDifference = -1;
+        break;
+      case "right":
+        checkedObjectXPositionDifference = 1;
+        break;
+      default:
+        break;
+    }
+
+    if (
+      areColliding(
+        {
+          ...item,
+          y: item.y + checkedObjectYPositionDifference,
+          x: item.x + checkedObjectXPositionDifference,
+        },
+        obstacle
+      )
+    ) {
+      return true;
+    }
+  }
+  return false;
+};

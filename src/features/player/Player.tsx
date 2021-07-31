@@ -5,7 +5,7 @@ import {
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
 } from "../../constants";
-import { areColliding } from "../gameMechanics/gameMechanics";
+import { doesItemHaveAnObstacleOnASide } from "../gameMechanics/gameMechanics";
 import useInterval from "../interval/useInterval";
 import { KeyboardControls } from "../keyboardControls/KeyboardControls";
 import { selectPressedKeys } from "../keyboardControls/keyboardControlsSlice";
@@ -26,46 +26,6 @@ export function Player() {
   const playerState = useAppSelector(selectPlayer);
   const obstaclesState = useAppSelector(selectObstacles);
   const pressedKeys = useAppSelector(selectPressedKeys);
-
-  const doesPlayerHaveAnObstacleOnASide = (
-    side: "top" | "bottom" | "left" | "right"
-  ): boolean => {
-    // Check if there's an obstacle on a certain side of the player
-    for (let index = 0; index < obstaclesState.length; index++) {
-      // TODO: Optimize which obstacles to check (can't check every single one)
-      const obstacle = obstaclesState[index];
-      let checkedObjectXPositionDifference = 0;
-      let checkedObjectYPositionDifference = 0;
-
-      switch (side) {
-        case "top":
-          checkedObjectYPositionDifference = 1;
-          break;
-        case "bottom":
-          checkedObjectYPositionDifference = -1;
-          break;
-        case "left":
-          checkedObjectXPositionDifference = -1;
-          break;
-        case "right":
-          checkedObjectXPositionDifference = 1;
-          break;
-        default:
-          break;
-      }
-
-      if (
-        areColliding(playerState, {
-          ...obstacle,
-          y: obstacle.y + checkedObjectYPositionDifference,
-          x: obstacle.x + checkedObjectXPositionDifference,
-        })
-      ) {
-        return true;
-      }
-    }
-    return false;
-  };
 
   // Accelerating
   useInterval(() => {
@@ -103,31 +63,44 @@ export function Player() {
   // Speed (x-axis movement)
   useInterval(() => {
     if (playerState.speedX < 0) {
-      dispatch(moveLeft());
+      // TODO: Optimize which obstacles to check (can't check every single one). Do for all doesItemHaveAnObstacleOnASide's
+      if (doesItemHaveAnObstacleOnASide(playerState, obstaclesState, "left")) {
+        dispatch(setYSpeed(0));
+      } else {
+        dispatch(moveLeft());
+      }
     } else if (playerState.speedX > 0) {
-      dispatch(moveRight());
+      if (doesItemHaveAnObstacleOnASide(playerState, obstaclesState, "right")) {
+        dispatch(setYSpeed(0));
+      } else {
+        dispatch(moveRight());
+      }
     }
   }, 500 / Math.abs(playerState.speedX) ?? 100);
 
   // Speed (y-axis movement)
   useInterval(() => {
     if (playerState.speedY < 0) {
-      if (doesPlayerHaveAnObstacleOnASide("top")) {
+      if (doesItemHaveAnObstacleOnASide(playerState, obstaclesState, "top")) {
         dispatch(setYSpeed(0));
+      } else {
+        dispatch(moveUp());
       }
-      dispatch(moveUp());
     } else if (playerState.speedY > 0) {
-      if (doesPlayerHaveAnObstacleOnASide("bottom")) {
+      if (
+        doesItemHaveAnObstacleOnASide(playerState, obstaclesState, "bottom")
+      ) {
         dispatch(setCanJump(true));
         dispatch(setYSpeed(0));
+      } else {
+        dispatch(moveDown());
       }
-      dispatch(moveDown());
     }
   }, 50 / Math.abs(playerState.speedY) ?? 10);
 
   // Gravity
   useInterval(() => {
-    if (!doesPlayerHaveAnObstacleOnASide("bottom")) {
+    if (!doesItemHaveAnObstacleOnASide(playerState, obstaclesState, "bottom")) {
       dispatch(setYSpeed(playerState.speedY + 1));
     }
   }, 50);
