@@ -69,18 +69,18 @@ function App() {
           className="Border-blocker top"
           style={{
             height: SCREEN_TOP_MARGIN,
-            width: SCREEN_WIDTH + 600,
-            left: -300,
-            top: -50,
+            width: SCREEN_WIDTH,
+            left: 0,
+            top: -SCREEN_TOP_MARGIN,
           }}
         ></div>
         <div
           className="Border-blocker bottom"
           style={{
-            height: height - SCREEN_HEIGHT - 50,
-            width: SCREEN_WIDTH + 600,
-            left: -300,
-            bottom: -(height - SCREEN_HEIGHT - 50),
+            height: height - SCREEN_HEIGHT - SCREEN_TOP_MARGIN,
+            width: SCREEN_WIDTH,
+            left: 0,
+            bottom: -(height - SCREEN_HEIGHT - SCREEN_TOP_MARGIN),
           }}
         >
           <button onClick={() => dispatch(moveLeft())} style={{ zIndex: 20 }}>
