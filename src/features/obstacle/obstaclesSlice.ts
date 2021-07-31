@@ -11,6 +11,7 @@ const initialState: ObstaclesState = {
     { x: 0, y: 20, width: 300, height: 100 },
     { x: 250, y: 75, width: 50, height: 10 },
     { x: 200, y: -200, width: 450, height: 25 },
+    { x: 200, y: 0, width: 50, height: 50 },
     { x: 300, y: -100, width: 450, height: 25 },
   ],
 };

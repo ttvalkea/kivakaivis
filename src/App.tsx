@@ -1,6 +1,10 @@
 import "./App.css";
 import { useAppDispatch, useAppSelector } from "./app/hooks";
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "./constants";
+import {
+  SCREEN_TOP_MARGIN,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+} from "./features/gameMechanics/constants";
 import { Obstacle } from "./features/obstacle/Obstacle";
 import { selectObstacles } from "./features/obstacle/obstaclesSlice";
 import { Player } from "./features/player/Player";
@@ -49,7 +53,7 @@ function App() {
             height: height,
             width: (width - SCREEN_WIDTH) / 2,
             right: -(width - SCREEN_WIDTH) / 2,
-            top: -50,
+            top: -SCREEN_TOP_MARGIN,
           }}
         ></div>
         <div
@@ -58,13 +62,13 @@ function App() {
             height: height,
             width: (width - SCREEN_WIDTH) / 2,
             left: -(width - SCREEN_WIDTH) / 2,
-            top: -50,
+            top: -SCREEN_TOP_MARGIN,
           }}
         ></div>
         <div
           className="Border-blocker top"
           style={{
-            height: 50,
+            height: SCREEN_TOP_MARGIN,
             width: SCREEN_WIDTH + 600,
             left: -300,
             top: -50,

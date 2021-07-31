@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { JUMP_STRENGTH } from "../gameMechanics/constants";
 import { doesItemHaveAnObstacleOnASide } from "../gameMechanics/gameMechanics";
 import { selectObstacles } from "../obstacle/obstaclesSlice";
 import { selectPlayer, setCanJump, setYSpeed } from "../player/playerSlice";
@@ -34,7 +35,7 @@ export const KeyboardControls = () => {
         doesItemHaveAnObstacleOnASide(playerState, obstaclesState, "bottom")
       ) {
         dispatch(setCanJump(false));
-        dispatch(setYSpeed(playerState.speedY - 20));
+        dispatch(setYSpeed(playerState.speedY - JUMP_STRENGTH));
       }
     };
 

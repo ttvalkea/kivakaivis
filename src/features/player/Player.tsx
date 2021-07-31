@@ -4,7 +4,13 @@ import {
   PLAYER_WIDTH,
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
-} from "../../constants";
+  GRAVITY_INTERVAL_MS,
+  PLAYER_DECELERATION,
+  PLAYER_EARLY_ACCELERATION,
+  PLAYER_LATE_ACCELERATION,
+  X_AXIS_MOVEMENT_INTERVAL_MS,
+  Y_AXIS_MOVEMENT_INTERVAL_MS,
+} from "../gameMechanics/constants";
 import { doesItemHaveAnObstacleOnASide } from "../gameMechanics/gameMechanics";
 import useInterval from "../interval/useInterval";
 import { KeyboardControls } from "../keyboardControls/KeyboardControls";
@@ -35,27 +41,49 @@ export function Player() {
       (!pressedKeys.includes("ArrowRight") &&
         !pressedKeys.includes("ArrowLeft"))
     ) {
-      if (playerState.speedX > 0) {
-        dispatch(
-          setXSpeed(
-            playerState.speedX + (playerState.speedX - 15 < 0 ? -1 : -15)
-          )
-        );
-      }
-      if (playerState.speedX < 0) {
-        dispatch(
-          setXSpeed(playerState.speedX + (playerState.speedX + 15 > 0 ? 1 : 15))
-        );
+      if (
+        doesItemHaveAnObstacleOnASide(playerState, obstaclesState, "bottom")
+      ) {
+        if (playerState.speedX > 0) {
+          dispatch(
+            setXSpeed(
+              playerState.speedX +
+                (playerState.speedX - PLAYER_DECELERATION < 0
+                  ? -1
+                  : -PLAYER_DECELERATION)
+            )
+          );
+        }
+        if (playerState.speedX < 0) {
+          dispatch(
+            setXSpeed(
+              playerState.speedX +
+                (playerState.speedX + PLAYER_DECELERATION > 0
+                  ? 1
+                  : PLAYER_DECELERATION)
+            )
+          );
+        }
       }
     }
     if (pressedKeys.includes("ArrowLeft")) {
       dispatch(
-        setXSpeed(playerState.speedX + (playerState.speedX > -30 ? -30 : -5))
+        setXSpeed(
+          playerState.speedX +
+            (playerState.speedX > -PLAYER_EARLY_ACCELERATION
+              ? -PLAYER_EARLY_ACCELERATION
+              : -PLAYER_LATE_ACCELERATION)
+        )
       );
     }
     if (pressedKeys.includes("ArrowRight")) {
       dispatch(
-        setXSpeed(playerState.speedX + (playerState.speedX < 30 ? 30 : 5))
+        setXSpeed(
+          playerState.speedX +
+            (playerState.speedX < PLAYER_EARLY_ACCELERATION
+              ? PLAYER_EARLY_ACCELERATION
+              : PLAYER_LATE_ACCELERATION)
+        )
       );
     }
   }, 50);
@@ -65,18 +93,18 @@ export function Player() {
     if (playerState.speedX < 0) {
       // TODO: Optimize which obstacles to check (can't check every single one). Do for all doesItemHaveAnObstacleOnASide's
       if (doesItemHaveAnObstacleOnASide(playerState, obstaclesState, "left")) {
-        dispatch(setYSpeed(0));
+        dispatch(setXSpeed(0));
       } else {
         dispatch(moveLeft());
       }
     } else if (playerState.speedX > 0) {
       if (doesItemHaveAnObstacleOnASide(playerState, obstaclesState, "right")) {
-        dispatch(setYSpeed(0));
+        dispatch(setXSpeed(0));
       } else {
         dispatch(moveRight());
       }
     }
-  }, 500 / Math.abs(playerState.speedX) ?? 100);
+  }, X_AXIS_MOVEMENT_INTERVAL_MS / Math.abs(playerState.speedX) ?? 100);
 
   // Speed (y-axis movement)
   useInterval(() => {
@@ -96,14 +124,14 @@ export function Player() {
         dispatch(moveDown());
       }
     }
-  }, 50 / Math.abs(playerState.speedY) ?? 10);
+  }, Y_AXIS_MOVEMENT_INTERVAL_MS / Math.abs(playerState.speedY) ?? 10);
 
   // Gravity
   useInterval(() => {
     if (!doesItemHaveAnObstacleOnASide(playerState, obstaclesState, "bottom")) {
       dispatch(setYSpeed(playerState.speedY + 1));
     }
-  }, 50);
+  }, GRAVITY_INTERVAL_MS);
 
   return (
     <div
@@ -116,7 +144,7 @@ export function Player() {
       }}
     >
       <KeyboardControls />
-      <i>{pressedKeys}</i>
+      {/* <i>{pressedKeys}</i> */}
     </div>
   );
 }
