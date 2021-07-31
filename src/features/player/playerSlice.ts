@@ -5,6 +5,7 @@ import renderedObject from "../../classes/renderedObject";
 export interface PlayerState extends renderedObject {
   speedX: number;
   speedY: number;
+  canJump: boolean;
 }
 
 const initialState: PlayerState = {
@@ -14,6 +15,7 @@ const initialState: PlayerState = {
   height: 20,
   speedX: 0,
   speedY: 0,
+  canJump: true, // If canJump is false, the player can't jump. When the player makes contact with the ground, this is set to true. Player must also be touching the ground in order to jump.
 };
 
 export const playerSlice = createSlice({
@@ -33,17 +35,27 @@ export const playerSlice = createSlice({
     moveDown: (state) => {
       state.y += 1;
     },
-    addXSpeed: (state, action: PayloadAction<number>) => {
-      state.speedX += action.payload;
+    setXSpeed: (state, action: PayloadAction<number>) => {
+      state.speedX = action.payload;
     },
-    addYSpeed: (state, action: PayloadAction<number>) => {
-      state.speedY += action.payload;
+    setYSpeed: (state, action: PayloadAction<number>) => {
+      state.speedY = action.payload;
+    },
+    setCanJump: (state, action: PayloadAction<boolean>) => {
+      state.canJump = action.payload;
     },
   },
 });
 
-export const { moveLeft, moveRight, moveUp, moveDown, addXSpeed, addYSpeed } =
-  playerSlice.actions;
+export const {
+  moveLeft,
+  moveRight,
+  moveUp,
+  moveDown,
+  setXSpeed,
+  setYSpeed,
+  setCanJump,
+} = playerSlice.actions;
 
 export const selectPlayer = (state: RootState): PlayerState => state.player;
 

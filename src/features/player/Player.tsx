@@ -11,11 +11,14 @@ import { KeyboardControls } from "../keyboardControls/KeyboardControls";
 import { selectPressedKeys } from "../keyboardControls/keyboardControlsSlice";
 import { selectObstacles } from "../obstacle/obstaclesSlice";
 import {
-  addXSpeed,
+  setYSpeed,
+  setXSpeed,
   moveDown,
   moveLeft,
   moveRight,
+  moveUp,
   selectPlayer,
+  setCanJump,
 } from "./playerSlice";
 
 export function Player() {
@@ -23,19 +26,45 @@ export function Player() {
   const playerState = useAppSelector(selectPlayer);
   const obstaclesState = useAppSelector(selectObstacles);
   const pressedKeys = useAppSelector(selectPressedKeys);
-  const fall = () => {
-    // If there's no obstacle under the player, move down one
-    let isColliding = false;
+
+  const doesPlayerHaveAnObstacleOnASide = (
+    side: "top" | "bottom" | "left" | "right"
+  ): boolean => {
+    // Check if there's an obstacle on a certain side of the player
     for (let index = 0; index < obstaclesState.length; index++) {
+      // TODO: Optimize which obstacles to check (can't check every single one)
       const obstacle = obstaclesState[index];
-      if (areColliding(playerState, { ...obstacle, y: obstacle.y - 1 })) {
-        isColliding = true;
-        break;
+      let checkedObjectXPositionDifference = 0;
+      let checkedObjectYPositionDifference = 0;
+
+      switch (side) {
+        case "top":
+          checkedObjectYPositionDifference = 1;
+          break;
+        case "bottom":
+          checkedObjectYPositionDifference = -1;
+          break;
+        case "left":
+          checkedObjectXPositionDifference = -1;
+          break;
+        case "right":
+          checkedObjectXPositionDifference = 1;
+          break;
+        default:
+          break;
+      }
+
+      if (
+        areColliding(playerState, {
+          ...obstacle,
+          y: obstacle.y + checkedObjectYPositionDifference,
+          x: obstacle.x + checkedObjectXPositionDifference,
+        })
+      ) {
+        return true;
       }
     }
-    if (!isColliding) {
-      dispatch(moveDown());
-    }
+    return false;
   };
 
   // Accelerating
@@ -47,32 +76,60 @@ export function Player() {
         !pressedKeys.includes("ArrowLeft"))
     ) {
       if (playerState.speedX > 0) {
-        dispatch(addXSpeed(playerState.speedX - 5 < 0 ? -1 : -5));
+        dispatch(
+          setXSpeed(
+            playerState.speedX + (playerState.speedX - 15 < 0 ? -1 : -15)
+          )
+        );
       }
       if (playerState.speedX < 0) {
-        dispatch(addXSpeed(playerState.speedX + 5 > 0 ? 1 : 5));
+        dispatch(
+          setXSpeed(playerState.speedX + (playerState.speedX + 15 > 0 ? 1 : 15))
+        );
       }
     }
     if (pressedKeys.includes("ArrowLeft")) {
-      dispatch(addXSpeed(playerState.speedX > -30 ? -30 : -5));
+      dispatch(
+        setXSpeed(playerState.speedX + (playerState.speedX > -30 ? -30 : -5))
+      );
     }
     if (pressedKeys.includes("ArrowRight")) {
-      dispatch(addXSpeed(playerState.speedX < 30 ? 30 : 5));
+      dispatch(
+        setXSpeed(playerState.speedX + (playerState.speedX < 30 ? 30 : 5))
+      );
     }
   }, 50);
 
-  // Speed
+  // Speed (x-axis movement)
   useInterval(() => {
     if (playerState.speedX < 0) {
       dispatch(moveLeft());
     } else if (playerState.speedX > 0) {
       dispatch(moveRight());
     }
-  }, 1000 / Math.abs(playerState.speedX));
+  }, 500 / Math.abs(playerState.speedX) ?? 100);
+
+  // Speed (y-axis movement)
+  useInterval(() => {
+    if (playerState.speedY < 0) {
+      if (doesPlayerHaveAnObstacleOnASide("top")) {
+        dispatch(setYSpeed(0));
+      }
+      dispatch(moveUp());
+    } else if (playerState.speedY > 0) {
+      if (doesPlayerHaveAnObstacleOnASide("bottom")) {
+        dispatch(setCanJump(true));
+        dispatch(setYSpeed(0));
+      }
+      dispatch(moveDown());
+    }
+  }, 50 / Math.abs(playerState.speedY) ?? 10);
 
   // Gravity
   useInterval(() => {
-    fall();
+    if (!doesPlayerHaveAnObstacleOnASide("bottom")) {
+      dispatch(setYSpeed(playerState.speedY + 1));
+    }
   }, 50);
 
   return (
