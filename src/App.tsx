@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { io, Socket } from "socket.io-client";
+import { DefaultEventsMap } from "socket.io-client/build/typed-events";
 import "./App.css";
 import { useAppDispatch, useAppSelector } from "./app/hooks";
 import {
@@ -22,6 +25,37 @@ function App() {
   const playerState = useAppSelector(selectPlayer);
   const obstaclesState = useAppSelector(selectObstacles);
 
+  // Socket.io
+  const [socket, setSocket] = useState(
+    null as Socket<DefaultEventsMap, DefaultEventsMap> | null
+  );
+
+  useEffect(() => {
+    const newSocket = io(`http://${window.location.hostname}:8000`);
+    setSocket(newSocket as Socket<DefaultEventsMap, DefaultEventsMap>);
+
+    newSocket.on("greetings", (arg) => {
+      // Receive message from the server
+      console.log(arg);
+    });
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [setSocket]);
+
+  const emitSocketIoMessage = () => {
+    // client-side
+    if (socket) {
+      // Send message to the server
+      socket.emit("hello", "world");
+    } else {
+      console.log("Error emitting a socket.io message: No socket");
+    }
+  };
+
+  // Socket.io ends ---
+
   const obstacleElements: any[] = [];
 
   obstaclesState.forEach((obstacle, index) => {
@@ -37,6 +71,10 @@ function App() {
   });
 
   const { height, width } = useWindowDimensions();
+  let socketRepresentation = "eioosockettii";
+  if (socket) {
+    socketRepresentation = socket.disconnected.toString();
+  }
 
   return (
     <div className="Game-container">
@@ -46,6 +84,7 @@ function App() {
       >
         {obstacleElements}
         <Player />
+        {socketRepresentation}
         {/* These border blockers block the visibility of off-screen objects */}
         <div
           className="Border-blocker right"
@@ -83,6 +122,11 @@ function App() {
             bottom: -(height - SCREEN_HEIGHT - SCREEN_TOP_MARGIN),
           }}
         >
+          <button onClick={() => emitSocketIoMessage()} style={{ zIndex: 20 }}>
+            Emit socket.io message
+          </button>
+          <br />
+          <br />
           <button onClick={() => dispatch(moveLeft())} style={{ zIndex: 20 }}>
             Move left
           </button>
