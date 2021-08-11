@@ -1,3 +1,5 @@
+import { Socket } from "socket.io-client";
+import { DefaultEventsMap } from "socket.io-client/build/typed-events";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   PLAYER_HEIGHT,
@@ -27,7 +29,9 @@ import {
   setCanJump,
 } from "./playerSlice";
 
-export function Player() {
+export function Player(props: {
+  socket: Socket<DefaultEventsMap, DefaultEventsMap> | null;
+}) {
   const dispatch = useAppDispatch();
   const playerState = useAppSelector(selectPlayer);
   const obstaclesState = useAppSelector(selectObstacles);
@@ -95,13 +99,13 @@ export function Player() {
       if (doesItemHaveAnObstacleOnASide(playerState, obstaclesState, "left")) {
         dispatch(setXSpeed(0));
       } else {
-        dispatch(moveLeft());
+        dispatch(moveLeft(props.socket ? props.socket.emit : () => {}));
       }
     } else if (playerState.speedX > 0) {
       if (doesItemHaveAnObstacleOnASide(playerState, obstaclesState, "right")) {
         dispatch(setXSpeed(0));
       } else {
-        dispatch(moveRight());
+        dispatch(moveRight(props.socket ? props.socket.emit : () => {}));
       }
     }
   }, X_AXIS_MOVEMENT_INTERVAL_MS / Math.abs(playerState.speedX) ?? 100);
@@ -112,7 +116,7 @@ export function Player() {
       if (doesItemHaveAnObstacleOnASide(playerState, obstaclesState, "top")) {
         dispatch(setYSpeed(0));
       } else {
-        dispatch(moveUp());
+        dispatch(moveUp(props.socket ? props.socket.emit : () => {}));
       }
     } else if (playerState.speedY > 0) {
       if (
@@ -121,7 +125,7 @@ export function Player() {
         dispatch(setCanJump(true));
         dispatch(setYSpeed(0));
       } else {
-        dispatch(moveDown());
+        dispatch(moveDown(props.socket ? props.socket.emit : () => {}));
       }
     }
   }, Y_AXIS_MOVEMENT_INTERVAL_MS / Math.abs(playerState.speedY) ?? 10);

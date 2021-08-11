@@ -45,7 +45,6 @@ function App() {
   }, [setSocket]);
 
   const emitSocketIoMessage = () => {
-    // client-side
     if (socket) {
       // Send message to the server
       socket.emit("hello", "world");
@@ -71,9 +70,9 @@ function App() {
   });
 
   const { height, width } = useWindowDimensions();
-  let socketRepresentation = "eioosockettii";
+  let isSocketConnectedText = "No socket";
   if (socket) {
-    socketRepresentation = socket.disconnected.toString();
+    isSocketConnectedText = socket.connected.toString();
   }
 
   return (
@@ -83,8 +82,8 @@ function App() {
         style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT }}
       >
         {obstacleElements}
-        <Player />
-        {socketRepresentation}
+        <Player socket={socket} />
+        {`Connected: ${isSocketConnectedText}`}
         {/* These border blockers block the visibility of off-screen objects */}
         <div
           className="Border-blocker right"
@@ -127,19 +126,33 @@ function App() {
           </button>
           <br />
           <br />
-          <button onClick={() => dispatch(moveLeft())} style={{ zIndex: 20 }}>
+          <button
+            onClick={() => dispatch(moveLeft(socket ? socket!.emit : () => {}))}
+            style={{ zIndex: 20 }}
+          >
             Move left
           </button>
           <br />
-          <button onClick={() => dispatch(moveRight())} style={{ zIndex: 20 }}>
+          <button
+            onClick={() =>
+              dispatch(moveRight(socket ? socket!.emit : () => {}))
+            }
+            style={{ zIndex: 20 }}
+          >
             Move right
           </button>
           <br />
-          <button onClick={() => dispatch(moveUp())} style={{ zIndex: 20 }}>
+          <button
+            onClick={() => dispatch(moveUp(socket ? socket!.emit : () => {}))}
+            style={{ zIndex: 20 }}
+          >
             Move up
           </button>
           <br />
-          <button onClick={() => dispatch(moveDown())} style={{ zIndex: 20 }}>
+          <button
+            onClick={() => dispatch(moveDown(socket ? socket!.emit : () => {}))}
+            style={{ zIndex: 20 }}
+          >
             Move down
           </button>
           <br />
