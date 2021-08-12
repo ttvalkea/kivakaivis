@@ -9,24 +9,33 @@ import {
   SCREEN_WIDTH,
 } from "../gameMechanics/constants";
 
-export function Obstacle(props: renderedObject) {
+export function RenderedElement(props: {
+  renderedObject: renderedObject;
+  className: string;
+}) {
   const playerState = useAppSelector(selectPlayer);
 
-  const isVisible = true;
+  const isVisible = true; // TODO: Don't render if out of viewport
 
   const relativeXPosition =
-    props.x - playerState.x + SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2;
+    props.renderedObject.x -
+    playerState.x +
+    SCREEN_WIDTH / 2 -
+    PLAYER_WIDTH / 2;
   const relativeYPosition =
-    props.y - playerState.y + SCREEN_HEIGHT / 2 - PLAYER_HEIGHT / 2;
+    props.renderedObject.y -
+    playerState.y +
+    SCREEN_HEIGHT / 2 -
+    PLAYER_HEIGHT / 2;
 
   return isVisible ? (
     <div
-      className="Obstacle"
+      className={props.className}
       style={{
         top: relativeYPosition,
         left: relativeXPosition,
-        height: props.height,
-        width: props.width,
+        height: props.renderedObject.height,
+        width: props.renderedObject.width,
       }}
     ></div>
   ) : null;

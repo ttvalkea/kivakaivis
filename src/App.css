@@ -14,8 +14,13 @@
 }
 
 .Character {
-  background-color: magenta;
   position: absolute;
+  background-color: magenta;
+}
+
+.OtherPlayer {
+  position: absolute;
+  background-color: rebeccapurple;
 }
 
 .Obstacle {

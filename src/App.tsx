@@ -7,9 +7,16 @@ import {
   SCREEN_TOP_MARGIN,
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
+  EMIT_NAME_UPDATE_PLAYER_POSITION,
+  PLAYER_HEIGHT,
+  PLAYER_WIDTH,
 } from "./features/gameMechanics/constants";
-import { Obstacle } from "./features/obstacle/Obstacle";
+import { RenderedElement } from "./features/renderedElement/RenderedElement";
 import { selectObstacles } from "./features/obstacle/obstaclesSlice";
+import {
+  selectOtherPlayers,
+  setOtherPlayers,
+} from "./features/player/otherPlayersSlice";
 import { Player } from "./features/player/Player";
 import {
   moveDown,
@@ -24,6 +31,7 @@ function App() {
   const dispatch = useAppDispatch();
   const playerState = useAppSelector(selectPlayer);
   const obstaclesState = useAppSelector(selectObstacles);
+  const otherPlayersState = useAppSelector(selectOtherPlayers);
 
   // Socket.io
   const [socket, setSocket] = useState(
@@ -31,40 +39,62 @@ function App() {
   );
 
   useEffect(() => {
-    const newSocket = io(`http://${window.location.hostname}:8000`);
-    setSocket(newSocket as Socket<DefaultEventsMap, DefaultEventsMap>);
+    const initializeSocket = (): Socket<DefaultEventsMap, DefaultEventsMap> => {
+      const newSocket = io(`http://${window.location.hostname}:8000`);
+      setSocket(newSocket as Socket<DefaultEventsMap, DefaultEventsMap>);
 
-    newSocket.on("greetings", (arg) => {
-      // Receive message from the server
-      console.log(arg);
-    });
+      newSocket.on(
+        EMIT_NAME_UPDATE_PLAYER_POSITION,
+        (info: { x: number; y: number; playerId: string }) => {
+          // Receive message from the server about another player's position
+          dispatch(setOtherPlayers(info));
+          console.log(otherPlayersState);
+          console.log(info);
+        }
+      );
+      return newSocket;
+    };
+    const newSocket = initializeSocket();
 
     return () => {
       newSocket.disconnect();
     };
-  }, [setSocket]);
-
-  const emitSocketIoMessage = () => {
-    if (socket) {
-      // Send message to the server
-      socket.emit("hello", "world");
-    } else {
-      console.log("Error emitting a socket.io message: No socket");
-    }
-  };
+    // eslint-disable-next-line
+  }, [setSocket, dispatch]);
 
   // Socket.io ends ---
 
+  // ------ Rendered elements -------
+  // Obstacles
   const obstacleElements: any[] = [];
-
   obstaclesState.forEach((obstacle, index) => {
     obstacleElements.push(
-      <Obstacle
-        key={index}
-        x={obstacle.x}
-        y={obstacle.y}
-        height={obstacle.height}
-        width={obstacle.width}
+      <RenderedElement
+        className="Obstacle"
+        key={`obstacle${index}`}
+        renderedObject={{
+          x: obstacle.x,
+          y: obstacle.y,
+          height: obstacle.height,
+          width: obstacle.width,
+        }}
+      />
+    );
+  });
+
+  // Other players
+  const otherPlayerElements: any[] = [];
+  otherPlayersState.otherPlayers.forEach((otherPlayer, index) => {
+    otherPlayerElements.push(
+      <RenderedElement
+        className="OtherPlayer"
+        key={`otherPlayer${index}`}
+        renderedObject={{
+          x: otherPlayer.x,
+          y: otherPlayer.y,
+          height: PLAYER_HEIGHT,
+          width: PLAYER_WIDTH,
+        }}
       />
     );
   });
@@ -82,6 +112,7 @@ function App() {
         style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT }}
       >
         {obstacleElements}
+        {otherPlayerElements}
         <Player socket={socket} />
         {`Connected: ${isSocketConnectedText}`}
         {/* These border blockers block the visibility of off-screen objects */}
@@ -121,11 +152,6 @@ function App() {
             bottom: -(height - SCREEN_HEIGHT - SCREEN_TOP_MARGIN),
           }}
         >
-          <button onClick={() => emitSocketIoMessage()} style={{ zIndex: 20 }}>
-            Emit socket.io message
-          </button>
-          <br />
-          <br />
           <button onClick={() => dispatch(moveLeft())} style={{ zIndex: 20 }}>
             Move left
           </button>
