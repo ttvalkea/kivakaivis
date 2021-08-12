@@ -18,6 +18,7 @@ import useInterval from "../interval/useInterval";
 import { KeyboardControls } from "../keyboardControls/KeyboardControls";
 import { selectPressedKeys } from "../keyboardControls/keyboardControlsSlice";
 import { selectObstacles } from "../obstacle/obstaclesSlice";
+import { emitPlayerPositionUpdate } from "../socket/socketUtilities";
 import {
   setYSpeed,
   setXSpeed,
@@ -99,13 +100,15 @@ export function Player(props: {
       if (doesItemHaveAnObstacleOnASide(playerState, obstaclesState, "left")) {
         dispatch(setXSpeed(0));
       } else {
-        dispatch(moveLeft(props.socket ? props.socket.emit : () => {}));
+        dispatch(moveLeft());
+        emitPlayerPositionUpdate(props.socket, playerState.x, playerState.y);
       }
     } else if (playerState.speedX > 0) {
       if (doesItemHaveAnObstacleOnASide(playerState, obstaclesState, "right")) {
         dispatch(setXSpeed(0));
       } else {
-        dispatch(moveRight(props.socket ? props.socket.emit : () => {}));
+        dispatch(moveRight());
+        emitPlayerPositionUpdate(props.socket, playerState.x, playerState.y);
       }
     }
   }, X_AXIS_MOVEMENT_INTERVAL_MS / Math.abs(playerState.speedX) ?? 100);
@@ -116,7 +119,8 @@ export function Player(props: {
       if (doesItemHaveAnObstacleOnASide(playerState, obstaclesState, "top")) {
         dispatch(setYSpeed(0));
       } else {
-        dispatch(moveUp(props.socket ? props.socket.emit : () => {}));
+        dispatch(moveUp());
+        emitPlayerPositionUpdate(props.socket, playerState.x, playerState.y);
       }
     } else if (playerState.speedY > 0) {
       if (
@@ -125,7 +129,8 @@ export function Player(props: {
         dispatch(setCanJump(true));
         dispatch(setYSpeed(0));
       } else {
-        dispatch(moveDown(props.socket ? props.socket.emit : () => {}));
+        dispatch(moveDown());
+        emitPlayerPositionUpdate(props.socket, playerState.x, playerState.y);
       }
     }
   }, Y_AXIS_MOVEMENT_INTERVAL_MS / Math.abs(playerState.speedY) ?? 10);

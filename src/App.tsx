@@ -126,33 +126,19 @@ function App() {
           </button>
           <br />
           <br />
-          <button
-            onClick={() => dispatch(moveLeft(socket ? socket!.emit : () => {}))}
-            style={{ zIndex: 20 }}
-          >
+          <button onClick={() => dispatch(moveLeft())} style={{ zIndex: 20 }}>
             Move left
           </button>
           <br />
-          <button
-            onClick={() =>
-              dispatch(moveRight(socket ? socket!.emit : () => {}))
-            }
-            style={{ zIndex: 20 }}
-          >
+          <button onClick={() => dispatch(moveRight())} style={{ zIndex: 20 }}>
             Move right
           </button>
           <br />
-          <button
-            onClick={() => dispatch(moveUp(socket ? socket!.emit : () => {}))}
-            style={{ zIndex: 20 }}
-          >
+          <button onClick={() => dispatch(moveUp())} style={{ zIndex: 20 }}>
             Move up
           </button>
           <br />
-          <button
-            onClick={() => dispatch(moveDown(socket ? socket!.emit : () => {}))}
-            style={{ zIndex: 20 }}
-          >
+          <button onClick={() => dispatch(moveDown())} style={{ zIndex: 20 }}>
             Move down
           </button>
           <br />
