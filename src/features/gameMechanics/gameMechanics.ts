@@ -1,8 +1,11 @@
-import renderedObject from "../../classes/renderedObject";
+import { Socket } from "socket.io-client";
+import { DefaultEventsMap } from "socket.io-client/build/typed-events";
+import { renderedObjectType } from "../types/types";
+import { EMIT_NAME_START_NEW_GAME } from "./constants";
 
 export const areColliding = (
-  item1: renderedObject,
-  item2: renderedObject
+  item1: renderedObjectType,
+  item2: renderedObjectType
 ): boolean => {
   return (
     item1.x < item2.x + item2.width &&
@@ -13,8 +16,8 @@ export const areColliding = (
 };
 
 export const doesItemHaveAnObstacleOnASide = (
-  item: renderedObject,
-  obstacles: renderedObject[],
+  item: renderedObjectType,
+  obstacles: renderedObjectType[],
   side: "top" | "bottom" | "left" | "right"
 ): boolean => {
   // Check if there's an obstacle on a certain side of an item
@@ -54,4 +57,10 @@ export const doesItemHaveAnObstacleOnASide = (
     }
   }
   return false;
+};
+
+export const startNewGame = (
+  socket: Socket<DefaultEventsMap, DefaultEventsMap>
+) => {
+  socket.emit(EMIT_NAME_START_NEW_GAME);
 };

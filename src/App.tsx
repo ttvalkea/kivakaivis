@@ -12,9 +12,13 @@ import {
   PLAYER_WIDTH,
   EMIT_NAME_REMOVE_PLAYER,
   EMIT_NAME_SET_OTHER_PLAYERS_LIST,
+  EMIT_NAME_START_NEW_GAME,
 } from "./features/gameMechanics/constants";
 import { RenderedElement } from "./features/renderedElement/RenderedElement";
-import { selectObstacles } from "./features/obstacle/obstaclesSlice";
+import {
+  selectObstacles,
+  setObstacles,
+} from "./features/obstacle/obstaclesSlice";
 import {
   removePlayer,
   selectOtherPlayers,
@@ -22,14 +26,15 @@ import {
 } from "./features/player/otherPlayersSlice";
 import { Player } from "./features/player/Player";
 import {
-  moveDown,
-  moveLeft,
-  moveRight,
-  moveUp,
+  // moveDown, // TODO: Remove these and remove outcommented code
+  // moveLeft,
+  // moveRight,
+  // moveUp,
   selectPlayer,
 } from "./features/player/playerSlice";
 import useWindowDimensions from "./features/windowDimensions/windowDimensions";
-import { PlayerType } from "./features/types/types";
+import { obstacleType, PlayerType } from "./features/types/types";
+import { startNewGame } from "./features/gameMechanics/gameMechanics";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -47,10 +52,10 @@ function App() {
       const newSocket = io(`http://${window.location.hostname}:8000`);
       setSocket(newSocket as Socket<DefaultEventsMap, DefaultEventsMap>);
 
+      // Defining all the events that are listened for
       newSocket.on(EMIT_NAME_UPDATE_PLAYER_POSITION, (player: PlayerType) => {
         // Receive message from the server about another player's position
         dispatch(setOtherPlayers([player]));
-        console.log(otherPlayersState);
       });
       newSocket.on(EMIT_NAME_REMOVE_PLAYER, (playerId: string) => {
         dispatch(removePlayer(playerId));
@@ -61,6 +66,9 @@ function App() {
           dispatch(setOtherPlayers(players));
         }
       );
+      newSocket.on(EMIT_NAME_START_NEW_GAME, (obstacles: obstacleType[]) => {
+        dispatch(setObstacles(obstacles));
+      });
 
       return newSocket;
     };
@@ -165,7 +173,7 @@ function App() {
             bottom: -(height - SCREEN_HEIGHT - SCREEN_TOP_MARGIN),
           }}
         >
-          <button onClick={() => dispatch(moveLeft())} style={{ zIndex: 20 }}>
+          {/* <button onClick={() => dispatch(moveLeft())} style={{ zIndex: 20 }}>
             Move left
           </button>
           <br />
@@ -180,7 +188,7 @@ function App() {
           <button onClick={() => dispatch(moveDown())} style={{ zIndex: 20 }}>
             Move down
           </button>
-          <br />
+          <br /> */}
           pos x: {playerState.x}
           <br />
           pos y: {playerState.y}
@@ -188,6 +196,13 @@ function App() {
           speedX: {playerState.speedX}
           <br />
           speedY: {playerState.speedY}
+          <br />
+          <button
+            onClick={() => (socket ? startNewGame(socket) : {})}
+            style={{ zIndex: 20 }}
+          >
+            Start a new game
+          </button>
         </div>
       </div>
     </div>

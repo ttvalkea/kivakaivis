@@ -1,16 +1,16 @@
 import { useAppSelector } from "../../app/hooks";
 
 import { selectPlayer } from "../player/playerSlice";
-import renderedObject from "../../classes/renderedObject";
 import {
   PLAYER_HEIGHT,
   PLAYER_WIDTH,
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
 } from "../gameMechanics/constants";
+import { renderedObjectType } from "../types/types";
 
 export function RenderedElement(props: {
-  renderedObject: renderedObject;
+  renderedObject: renderedObjectType;
   className: string;
   imageName: string;
 }) {

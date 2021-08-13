@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import renderedObject from "../../classes/renderedObject";
+import { renderedObjectType } from "../types/types";
 
-export interface PlayerState extends renderedObject {
+export interface PlayerState extends renderedObjectType {
   speedX: number;
   speedY: number;
   canJump: boolean;

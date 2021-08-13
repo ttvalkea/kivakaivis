@@ -101,15 +101,15 @@ export function Player(props: {
         dispatch(setXSpeed(0));
       } else {
         dispatch(moveLeft());
-        emitPlayerPositionUpdate(props.socket, playerState.x, playerState.y);
       }
+      emitPlayerPositionUpdate(props.socket, playerState.x, playerState.y);
     } else if (playerState.speedX > 0) {
       if (doesItemHaveAnObstacleOnASide(playerState, obstaclesState, "right")) {
         dispatch(setXSpeed(0));
       } else {
         dispatch(moveRight());
-        emitPlayerPositionUpdate(props.socket, playerState.x, playerState.y);
       }
+      emitPlayerPositionUpdate(props.socket, playerState.x, playerState.y);
     }
   }, X_AXIS_MOVEMENT_INTERVAL_MS / Math.abs(playerState.speedX) ?? 100);
 
@@ -120,8 +120,8 @@ export function Player(props: {
         dispatch(setYSpeed(0));
       } else {
         dispatch(moveUp());
-        emitPlayerPositionUpdate(props.socket, playerState.x, playerState.y);
       }
+      emitPlayerPositionUpdate(props.socket, playerState.x, playerState.y);
     } else if (playerState.speedY > 0) {
       if (
         doesItemHaveAnObstacleOnASide(playerState, obstaclesState, "bottom")
@@ -130,8 +130,8 @@ export function Player(props: {
         dispatch(setYSpeed(0));
       } else {
         dispatch(moveDown());
-        emitPlayerPositionUpdate(props.socket, playerState.x, playerState.y);
       }
+      emitPlayerPositionUpdate(props.socket, playerState.x, playerState.y);
     }
   }, Y_AXIS_MOVEMENT_INTERVAL_MS / Math.abs(playerState.speedY) ?? 10);
 
