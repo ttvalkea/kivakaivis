@@ -10,10 +10,13 @@ import {
   EMIT_NAME_UPDATE_PLAYER_POSITION,
   PLAYER_HEIGHT,
   PLAYER_WIDTH,
+  EMIT_NAME_REMOVE_PLAYER,
+  EMIT_NAME_SET_OTHER_PLAYERS_LIST,
 } from "./features/gameMechanics/constants";
 import { RenderedElement } from "./features/renderedElement/RenderedElement";
 import { selectObstacles } from "./features/obstacle/obstaclesSlice";
 import {
+  removePlayer,
   selectOtherPlayers,
   setOtherPlayers,
 } from "./features/player/otherPlayersSlice";
@@ -26,6 +29,7 @@ import {
   selectPlayer,
 } from "./features/player/playerSlice";
 import useWindowDimensions from "./features/windowDimensions/windowDimensions";
+import { PlayerType } from "./features/types/types";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -43,15 +47,21 @@ function App() {
       const newSocket = io(`http://${window.location.hostname}:8000`);
       setSocket(newSocket as Socket<DefaultEventsMap, DefaultEventsMap>);
 
+      newSocket.on(EMIT_NAME_UPDATE_PLAYER_POSITION, (player: PlayerType) => {
+        // Receive message from the server about another player's position
+        dispatch(setOtherPlayers([player]));
+        console.log(otherPlayersState);
+      });
+      newSocket.on(EMIT_NAME_REMOVE_PLAYER, (playerId: string) => {
+        dispatch(removePlayer(playerId));
+      });
       newSocket.on(
-        EMIT_NAME_UPDATE_PLAYER_POSITION,
-        (info: { x: number; y: number; playerId: string }) => {
-          // Receive message from the server about another player's position
-          dispatch(setOtherPlayers(info));
-          console.log(otherPlayersState);
-          console.log(info);
+        EMIT_NAME_SET_OTHER_PLAYERS_LIST,
+        (players: PlayerType[]) => {
+          dispatch(setOtherPlayers(players));
         }
       );
+
       return newSocket;
     };
     const newSocket = initializeSocket();
@@ -104,7 +114,7 @@ function App() {
   const { height, width } = useWindowDimensions();
   let isSocketConnectedText = "No socket";
   if (socket) {
-    isSocketConnectedText = socket.connected.toString();
+    isSocketConnectedText = socket.connected ? "Yes" : "No";
   }
 
   return (
@@ -116,7 +126,8 @@ function App() {
         {obstacleElements}
         {otherPlayerElements}
         <Player socket={socket} />
-        {`Connected: ${isSocketConnectedText}`}
+        {`Connected to server: ${isSocketConnectedText} `}
+        {`- Number of players: ${otherPlayersState.otherPlayers.length + 1}`}
         {/* These border blockers block the visibility of off-screen objects */}
         <div
           className="Border-blocker right"

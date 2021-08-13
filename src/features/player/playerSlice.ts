@@ -10,7 +10,7 @@ export interface PlayerState extends renderedObject {
 
 const initialState: PlayerState = {
   x: 0,
-  y: 0,
+  y: -2,
   width: 20,
   height: 20,
   speedX: 0,
