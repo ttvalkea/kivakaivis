@@ -9,7 +9,7 @@
 .Window-border {
   margin: auto;
   margin-top: 50px;
-  background-color: rgb(155, 232, 255);
+  background-color: #c0ffff;
   position: relative;
 }
 
@@ -28,5 +28,5 @@
 
 .Border-blocker {
   position: absolute;
-  background-color: rgb(73, 65, 51);
+  background-color: rgb(78, 62, 33);
 }
