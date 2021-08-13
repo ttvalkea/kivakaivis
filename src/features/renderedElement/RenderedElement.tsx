@@ -16,8 +16,6 @@ export function RenderedElement(props: {
 }) {
   const playerState = useAppSelector(selectPlayer);
 
-  const isVisible = true; // TODO: Don't render if out of viewport
-
   const relativeXPosition =
     props.renderedObject.x -
     playerState.x +
@@ -29,20 +27,42 @@ export function RenderedElement(props: {
     SCREEN_HEIGHT / 2 -
     PLAYER_HEIGHT / 2;
 
-  const style: React.CSSProperties = {
-    top: relativeYPosition,
-    left: relativeXPosition,
-    height: props.renderedObject.height,
-    width: props.renderedObject.width,
-  };
+  // Don't render element if it's out of viewport
+  const isVisible =
+    // Outside, right of the player
+    props.renderedObject.x - playerState.x - PLAYER_WIDTH / 2 <=
+      SCREEN_WIDTH / 2 &&
+    // Outside, left of the player
+    props.renderedObject.x -
+      playerState.x -
+      PLAYER_WIDTH / 2 +
+      props.renderedObject.width >=
+      (SCREEN_WIDTH / 2) * -1 &&
+    // Outside, below the player
+    props.renderedObject.y - playerState.y - PLAYER_HEIGHT / 2 <=
+      SCREEN_HEIGHT / 2 &&
+    // Outside, above the player
+    props.renderedObject.y -
+      playerState.y -
+      PLAYER_HEIGHT / 2 +
+      props.renderedObject.height >=
+      (SCREEN_HEIGHT / 2) * -1;
 
-  if (props.imageName) {
-    style.backgroundImage = `url(${
-      process.env.PUBLIC_URL + `images/${props.imageName}.PNG`
-    })`;
+  if (isVisible) {
+    const style: React.CSSProperties = {
+      top: relativeYPosition,
+      left: relativeXPosition,
+      height: props.renderedObject.height,
+      width: props.renderedObject.width,
+    };
+
+    if (props.imageName) {
+      style.backgroundImage = `url(${
+        process.env.PUBLIC_URL + `images/${props.imageName}.PNG`
+      })`;
+    }
+
+    return <div className={props.className} style={style}></div>;
   }
-
-  return isVisible ? (
-    <div className={props.className} style={style}></div>
-  ) : null;
+  return null; // Element is not in view
 }
