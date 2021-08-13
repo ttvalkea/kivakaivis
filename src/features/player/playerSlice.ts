@@ -1,21 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
+import { PLAYER_HEIGHT, PLAYER_WIDTH } from "../gameMechanics/constants";
 import { renderedObjectType } from "../types/types";
 
 export interface PlayerState extends renderedObjectType {
   speedX: number;
   speedY: number;
-  canJump: boolean;
 }
 
 const initialState: PlayerState = {
   x: 0,
   y: -2,
-  width: 20,
-  height: 20,
+  width: PLAYER_WIDTH,
+  height: PLAYER_HEIGHT,
   speedX: 0,
   speedY: 0,
-  canJump: true, // If canJump is false, the player can't jump. When the player makes contact with the ground, this is set to true. Player must also be touching the ground in order to jump.
 };
 
 export const playerSlice = createSlice({
@@ -41,21 +40,11 @@ export const playerSlice = createSlice({
     setYSpeed: (state, action: PayloadAction<number>) => {
       state.speedY = action.payload;
     },
-    setCanJump: (state, action: PayloadAction<boolean>) => {
-      state.canJump = action.payload;
-    },
   },
 });
 
-export const {
-  moveLeft,
-  moveRight,
-  moveUp,
-  moveDown,
-  setXSpeed,
-  setYSpeed,
-  setCanJump,
-} = playerSlice.actions;
+export const { moveLeft, moveRight, moveUp, moveDown, setXSpeed, setYSpeed } =
+  playerSlice.actions;
 
 export const selectPlayer = (state: RootState): PlayerState => state.player;
 

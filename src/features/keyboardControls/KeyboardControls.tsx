@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { JUMP_STRENGTH } from "../gameMechanics/constants";
 import { doesItemHaveAnObstacleOnASide } from "../gameMechanics/gameMechanics";
 import { selectObstacles } from "../obstacle/obstaclesSlice";
-import { selectPlayer, setCanJump, setYSpeed } from "../player/playerSlice";
+import { selectPlayer, setYSpeed } from "../player/playerSlice";
 import { selectPressedKeys, setPressedKeys } from "./keyboardControlsSlice";
 
 export const KeyboardControls = () => {
@@ -31,10 +31,8 @@ export const KeyboardControls = () => {
       // Jumping
       if (
         key === "Shift" &&
-        playerState.canJump &&
         doesItemHaveAnObstacleOnASide(playerState, obstaclesState, "bottom")
       ) {
-        dispatch(setCanJump(false));
         dispatch(setYSpeed(playerState.speedY - JUMP_STRENGTH));
       }
     };

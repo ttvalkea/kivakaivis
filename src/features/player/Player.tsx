@@ -27,7 +27,6 @@ import {
   moveRight,
   moveUp,
   selectPlayer,
-  setCanJump,
 } from "./playerSlice";
 
 export function Player(props: {
@@ -126,7 +125,6 @@ export function Player(props: {
       if (
         doesItemHaveAnObstacleOnASide(playerState, obstaclesState, "bottom")
       ) {
-        dispatch(setCanJump(true));
         dispatch(setYSpeed(0));
       } else {
         dispatch(moveDown());
