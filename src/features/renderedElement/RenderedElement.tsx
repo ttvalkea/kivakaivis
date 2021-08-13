@@ -12,6 +12,7 @@ import {
 export function RenderedElement(props: {
   renderedObject: renderedObject;
   className: string;
+  imageName: string;
 }) {
   const playerState = useAppSelector(selectPlayer);
 
@@ -28,15 +29,20 @@ export function RenderedElement(props: {
     SCREEN_HEIGHT / 2 -
     PLAYER_HEIGHT / 2;
 
+  const style: React.CSSProperties = {
+    top: relativeYPosition,
+    left: relativeXPosition,
+    height: props.renderedObject.height,
+    width: props.renderedObject.width,
+  };
+
+  if (props.imageName) {
+    style.backgroundImage = `url(${
+      process.env.PUBLIC_URL + `images/${props.imageName}.PNG`
+    })`;
+  }
+
   return isVisible ? (
-    <div
-      className={props.className}
-      style={{
-        top: relativeYPosition,
-        left: relativeXPosition,
-        height: props.renderedObject.height,
-        width: props.renderedObject.width,
-      }}
-    ></div>
+    <div className={props.className} style={style}></div>
   ) : null;
 }

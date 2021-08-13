@@ -78,6 +78,7 @@ function App() {
           height: obstacle.height,
           width: obstacle.width,
         }}
+        imageName=""
       />
     );
   });
@@ -95,6 +96,7 @@ function App() {
           height: PLAYER_HEIGHT,
           width: PLAYER_WIDTH,
         }}
+        imageName="otherPlayer"
       />
     );
   });
