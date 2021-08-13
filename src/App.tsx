@@ -96,7 +96,7 @@ function App() {
           height: obstacle.height,
           width: obstacle.width,
         }}
-        imageName=""
+        imageName={obstacle.destructible ? "dirt" : "stone"}
       />
     );
   });

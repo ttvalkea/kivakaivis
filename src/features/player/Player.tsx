@@ -148,7 +148,7 @@ export function Player(props: {
         height: PLAYER_HEIGHT,
         marginTop: SCREEN_HEIGHT / 2 - PLAYER_HEIGHT / 2,
         marginLeft: SCREEN_WIDTH / 2 - PLAYER_WIDTH / 2,
-        backgroundImage: `url(${process.env.PUBLIC_URL + "images/player.PNG"})`,
+        backgroundImage: `url(${process.env.PUBLIC_URL + "images/player.png"})`,
       }}
     >
       <KeyboardControls />
