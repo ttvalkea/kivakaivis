@@ -1,6 +1,6 @@
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "socket.io-client/build/typed-events";
-import { renderedObjectType } from "../types/types";
+import { mapTileTerrain, renderedObjectType } from "../types/types";
 import { EMIT_NAME_START_NEW_GAME } from "./constants";
 
 export const areColliding = (
@@ -63,4 +63,19 @@ export const startNewGame = (
   socket: Socket<DefaultEventsMap, DefaultEventsMap>
 ) => {
   socket.emit(EMIT_NAME_START_NEW_GAME);
+};
+
+export const getRenderedElementImageName = (type: mapTileTerrain): string => {
+  switch (type) {
+    case mapTileTerrain.dirt:
+      return "dirt";
+    case mapTileTerrain.rock:
+      return "rock";
+    case mapTileTerrain.indestructible:
+      return "rock";
+    case mapTileTerrain.empty:
+      return "empty";
+    default:
+      return "";
+  }
 };

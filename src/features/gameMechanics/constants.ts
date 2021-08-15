@@ -11,6 +11,7 @@ export const PLAYER_WIDTH = 20;
 export const PLAYER_HEIGHT = 20;
 export const SCREEN_WIDTH = 800;
 export const SCREEN_HEIGHT = 800;
+export const TILE_SIZE_IN_PX = 25;
 
 // Socket.io emitted event names
 // NOTE: All of these should be the exact same in server and client

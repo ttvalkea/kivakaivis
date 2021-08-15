@@ -33,8 +33,11 @@ import {
   selectPlayer,
 } from "./features/player/playerSlice";
 import useWindowDimensions from "./features/windowDimensions/windowDimensions";
-import { obstacleType, PlayerType } from "./features/types/types";
-import { startNewGame } from "./features/gameMechanics/gameMechanics";
+import { mapTileType, PlayerType } from "./features/types/types";
+import {
+  getRenderedElementImageName,
+  startNewGame,
+} from "./features/gameMechanics/gameMechanics";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -66,8 +69,9 @@ function App() {
           dispatch(setOtherPlayers(players));
         }
       );
-      newSocket.on(EMIT_NAME_START_NEW_GAME, (obstacles: obstacleType[]) => {
-        dispatch(setObstacles(obstacles));
+      newSocket.on(EMIT_NAME_START_NEW_GAME, (mapTiles: mapTileType[]) => {
+        console.log(mapTiles);
+        dispatch(setObstacles(mapTiles));
       });
 
       return newSocket;
@@ -96,7 +100,7 @@ function App() {
           height: obstacle.height,
           width: obstacle.width,
         }}
-        imageName={obstacle.destructible ? "dirt" : "stone"}
+        imageName={getRenderedElementImageName(obstacle.type)}
       />
     );
   });
