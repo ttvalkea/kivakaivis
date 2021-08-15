@@ -17,49 +17,40 @@ export const areColliding = (
 
 export const doesItemHaveAnObstacleOnASide = (
   item: renderedObjectType,
-  allObstacles: renderedObjectType[],
+  obstacles: renderedObjectType[],
   side: "top" | "bottom" | "left" | "right"
 ): boolean => {
   // Check if there's an obstacle on a certain side of an item
+  let checkedObjectXPositionDifference = 0;
+  let checkedObjectYPositionDifference = 0;
 
-  // Don't check all obstacles but instead only those that are next to the player using the mapGrid
-  const obstacles = allObstacles; // TODO
-  for (let index = 0; index < obstacles.length; index++) {
-    const obstacle = obstacles[index];
-    let checkedObjectXPositionDifference = 0;
-    let checkedObjectYPositionDifference = 0;
-
-    switch (side) {
-      case "top":
-        checkedObjectYPositionDifference = -1;
-        break;
-      case "bottom":
-        checkedObjectYPositionDifference = 1;
-        break;
-      case "left":
-        checkedObjectXPositionDifference = -1;
-        break;
-      case "right":
-        checkedObjectXPositionDifference = 1;
-        break;
-      default:
-        break;
-    }
-
-    if (
-      areColliding(
-        {
-          ...item,
-          y: item.y + checkedObjectYPositionDifference,
-          x: item.x + checkedObjectXPositionDifference,
-        },
-        obstacle
-      )
-    ) {
-      return true;
-    }
+  switch (side) {
+    case "top":
+      checkedObjectYPositionDifference = -1;
+      break;
+    case "bottom":
+      checkedObjectYPositionDifference = 1;
+      break;
+    case "left":
+      checkedObjectXPositionDifference = -1;
+      break;
+    case "right":
+      checkedObjectXPositionDifference = 1;
+      break;
+    default:
+      break;
   }
-  return false;
+
+  return obstacles.some((o) =>
+    areColliding(
+      {
+        ...item,
+        y: item.y + checkedObjectYPositionDifference,
+        x: item.x + checkedObjectXPositionDifference,
+      },
+      o
+    )
+  );
 };
 
 export const startNewGame = (
