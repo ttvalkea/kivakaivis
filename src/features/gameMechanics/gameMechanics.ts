@@ -17,10 +17,13 @@ export const areColliding = (
 
 export const doesItemHaveAnObstacleOnASide = (
   item: renderedObjectType,
-  obstacles: renderedObjectType[],
+  allObstacles: renderedObjectType[],
   side: "top" | "bottom" | "left" | "right"
 ): boolean => {
   // Check if there's an obstacle on a certain side of an item
+
+  // Don't check all obstacles but instead only those that are next to the player using the mapGrid
+  const obstacles = allObstacles; // TODO
   for (let index = 0; index < obstacles.length; index++) {
     const obstacle = obstacles[index];
     let checkedObjectXPositionDifference = 0;

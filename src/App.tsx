@@ -38,12 +38,18 @@ import {
   getRenderedElementImageName,
   startNewGame,
 } from "./features/gameMechanics/gameMechanics";
+import { getLobbyMapTiles } from "./features/gameMechanics/lobbyMapTiles";
 
 function App() {
   const dispatch = useAppDispatch();
   const playerState = useAppSelector(selectPlayer);
   const obstaclesState = useAppSelector(selectObstacles);
   const otherPlayersState = useAppSelector(selectOtherPlayers);
+
+  // Set initial lobby map tiles
+  useEffect(() => {
+    dispatch(setObstacles(getLobbyMapTiles()));
+  }, [dispatch]);
 
   // Socket.io
   const [socket, setSocket] = useState(
