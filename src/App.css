@@ -23,7 +23,14 @@
 
 .Obstacle {
   position: absolute;
-  background-color: rgb(207, 126, 4);
+  background: linear-gradient(45deg, blue, red);
+  /* background-color: rgb(207, 126, 4); */
+}
+
+/* TODO: Remove this Dirt class definition */
+.Dirt {
+  position: absolute;
+  background: linear-gradient(45deg, green, orange);
 }
 
 .Border-blocker {

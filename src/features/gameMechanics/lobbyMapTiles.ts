@@ -7,70 +7,84 @@ export const getLobbyMapTiles = (): mapTileType[] => {
       gridY: -10,
       type: mapTileTerrain.indestructible,
       isDiscovered: true,
+      widthInTiles: 1,
+      heightInTiles: 1,
     },
     {
       gridX: 9,
       gridY: -11,
       type: mapTileTerrain.indestructible,
       isDiscovered: true,
+      widthInTiles: 1,
+      heightInTiles: 1,
     },
     {
       gridX: 8,
       gridY: -12,
       type: mapTileTerrain.indestructible,
       isDiscovered: true,
+      widthInTiles: 1,
+      heightInTiles: 1,
     },
     {
       gridX: 11,
       gridY: -13,
       type: mapTileTerrain.indestructible,
       isDiscovered: true,
+      widthInTiles: 1,
+      heightInTiles: 1,
     },
     {
       gridX: 9,
       gridY: -15,
       type: mapTileTerrain.indestructible,
       isDiscovered: true,
+      widthInTiles: 1,
+      heightInTiles: 1,
     },
     {
       gridX: 8,
       gridY: -16,
       type: mapTileTerrain.indestructible,
       isDiscovered: true,
+      widthInTiles: 1,
+      heightInTiles: 1,
     },
     {
       gridX: 10,
       gridY: -17,
       type: mapTileTerrain.indestructible,
       isDiscovered: true,
+      widthInTiles: 1,
+      heightInTiles: 1,
     },
   ];
-  for (let index = 0; index < 15; index++) {
-    const tile = {
-      gridX: -3 + index,
-      gridY: -9,
-      type: mapTileTerrain.indestructible,
-      isDiscovered: true,
-    };
-    tiles.push(tile);
-  }
 
-  for (let index = 0; index < 5; index++) {
-    const tile = {
-      gridX: -4,
-      gridY: -14 + index,
-      type: mapTileTerrain.indestructible,
-      isDiscovered: true,
-    };
-    const tile2 = {
-      gridX: 12,
-      gridY: -14 + index,
-      type: mapTileTerrain.indestructible,
-      isDiscovered: true,
-    };
-    tiles.push(tile);
-    tiles.push(tile2);
-  }
+  tiles.push({
+    gridX: -3,
+    gridY: -9,
+    type: mapTileTerrain.indestructible,
+    isDiscovered: true,
+    widthInTiles: 14,
+    heightInTiles: 1,
+  });
+
+  tiles.push({
+    gridX: -4,
+    gridY: -14,
+    type: mapTileTerrain.indestructible,
+    isDiscovered: true,
+    widthInTiles: 1,
+    heightInTiles: 5,
+  });
+  tiles.push({
+    gridX: 12,
+    gridY: -14,
+    type: mapTileTerrain.indestructible,
+    isDiscovered: true,
+    widthInTiles: 1,
+    heightInTiles: 4,
+  });
 
   // Lobby text :D
   // L
@@ -80,6 +94,8 @@ export const getLobbyMapTiles = (): mapTileType[] => {
       gridY: -22 + index,
       type: mapTileTerrain.indestructible,
       isDiscovered: true,
+      widthInTiles: 1,
+      heightInTiles: 1,
     };
     tiles.push(tile);
   }
@@ -90,6 +106,8 @@ export const getLobbyMapTiles = (): mapTileType[] => {
       gridY: -18,
       type: mapTileTerrain.indestructible,
       isDiscovered: true,
+      widthInTiles: 1,
+      heightInTiles: 1,
     };
     tiles.push(tile);
   }
@@ -101,6 +119,8 @@ export const getLobbyMapTiles = (): mapTileType[] => {
       gridY: -22 + index,
       type: mapTileTerrain.indestructible,
       isDiscovered: true,
+      widthInTiles: 1,
+      heightInTiles: 1,
     };
     tiles.push(tile);
   }
@@ -109,12 +129,16 @@ export const getLobbyMapTiles = (): mapTileType[] => {
     gridY: -22,
     type: mapTileTerrain.indestructible,
     isDiscovered: true,
+    widthInTiles: 1,
+    heightInTiles: 1,
   });
   tiles.push({
     gridX: 0,
     gridY: -18,
     type: mapTileTerrain.indestructible,
     isDiscovered: true,
+    widthInTiles: 1,
+    heightInTiles: 1,
   });
   for (let index = 0; index < 5; index++) {
     const tile = {
@@ -122,6 +146,8 @@ export const getLobbyMapTiles = (): mapTileType[] => {
       gridY: -22 + index,
       type: mapTileTerrain.indestructible,
       isDiscovered: true,
+      widthInTiles: 1,
+      heightInTiles: 1,
     };
     tiles.push(tile);
   }
@@ -133,6 +159,8 @@ export const getLobbyMapTiles = (): mapTileType[] => {
       gridY: -22 + index,
       type: mapTileTerrain.indestructible,
       isDiscovered: true,
+      widthInTiles: 1,
+      heightInTiles: 1,
     };
     tiles.push(tile);
   }
@@ -142,30 +170,40 @@ export const getLobbyMapTiles = (): mapTileType[] => {
     gridY: -22,
     type: mapTileTerrain.indestructible,
     isDiscovered: true,
+    widthInTiles: 1,
+    heightInTiles: 1,
   });
   tiles.push({
     gridX: 4,
     gridY: -18,
     type: mapTileTerrain.indestructible,
     isDiscovered: true,
+    widthInTiles: 1,
+    heightInTiles: 1,
   });
   tiles.push({
     gridX: 5,
     gridY: -21,
     type: mapTileTerrain.indestructible,
     isDiscovered: true,
+    widthInTiles: 1,
+    heightInTiles: 1,
   });
   tiles.push({
     gridX: 4,
     gridY: -20,
     type: mapTileTerrain.indestructible,
     isDiscovered: true,
+    widthInTiles: 1,
+    heightInTiles: 1,
   });
   tiles.push({
     gridX: 5,
     gridY: -19,
     type: mapTileTerrain.indestructible,
     isDiscovered: true,
+    widthInTiles: 1,
+    heightInTiles: 1,
   });
 
   // B
@@ -175,6 +213,8 @@ export const getLobbyMapTiles = (): mapTileType[] => {
       gridY: -22 + index,
       type: mapTileTerrain.indestructible,
       isDiscovered: true,
+      widthInTiles: 1,
+      heightInTiles: 1,
     };
     tiles.push(tile);
   }
@@ -184,30 +224,40 @@ export const getLobbyMapTiles = (): mapTileType[] => {
     gridY: -22,
     type: mapTileTerrain.indestructible,
     isDiscovered: true,
+    widthInTiles: 1,
+    heightInTiles: 1,
   });
   tiles.push({
     gridX: 8,
     gridY: -18,
     type: mapTileTerrain.indestructible,
     isDiscovered: true,
+    widthInTiles: 1,
+    heightInTiles: 1,
   });
   tiles.push({
     gridX: 9,
     gridY: -21,
     type: mapTileTerrain.indestructible,
     isDiscovered: true,
+    widthInTiles: 1,
+    heightInTiles: 1,
   });
   tiles.push({
     gridX: 8,
     gridY: -20,
     type: mapTileTerrain.indestructible,
     isDiscovered: true,
+    widthInTiles: 1,
+    heightInTiles: 1,
   });
   tiles.push({
     gridX: 9,
     gridY: -19,
     type: mapTileTerrain.indestructible,
     isDiscovered: true,
+    widthInTiles: 1,
+    heightInTiles: 1,
   });
 
   // Y
@@ -216,42 +266,56 @@ export const getLobbyMapTiles = (): mapTileType[] => {
     gridY: -20,
     type: mapTileTerrain.indestructible,
     isDiscovered: true,
+    widthInTiles: 1,
+    heightInTiles: 1,
   });
   tiles.push({
     gridX: 12,
     gridY: -19,
     type: mapTileTerrain.indestructible,
     isDiscovered: true,
+    widthInTiles: 1,
+    heightInTiles: 1,
   });
   tiles.push({
     gridX: 12,
     gridY: -18,
     type: mapTileTerrain.indestructible,
     isDiscovered: true,
+    widthInTiles: 1,
+    heightInTiles: 1,
   });
   tiles.push({
     gridX: 11,
     gridY: -22,
     type: mapTileTerrain.indestructible,
     isDiscovered: true,
+    widthInTiles: 1,
+    heightInTiles: 1,
   });
   tiles.push({
     gridX: 11,
     gridY: -21,
     type: mapTileTerrain.indestructible,
     isDiscovered: true,
+    widthInTiles: 1,
+    heightInTiles: 1,
   });
   tiles.push({
     gridX: 13,
     gridY: -22,
     type: mapTileTerrain.indestructible,
     isDiscovered: true,
+    widthInTiles: 1,
+    heightInTiles: 1,
   });
   tiles.push({
     gridX: 13,
     gridY: -21,
     type: mapTileTerrain.indestructible,
     isDiscovered: true,
+    widthInTiles: 1,
+    heightInTiles: 1,
   });
 
   return tiles;

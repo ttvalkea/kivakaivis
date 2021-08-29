@@ -22,8 +22,8 @@ export const obstaclesSlice = createSlice({
         obstacles.push({
           x: mapTile.gridX * TILE_SIZE_IN_PX,
           y: mapTile.gridY * TILE_SIZE_IN_PX,
-          height: TILE_SIZE_IN_PX,
-          width: TILE_SIZE_IN_PX,
+          height: mapTile.heightInTiles * TILE_SIZE_IN_PX,
+          width: mapTile.widthInTiles * TILE_SIZE_IN_PX,
           type: mapTile.type,
         });
       }

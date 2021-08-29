@@ -33,7 +33,11 @@ import {
   selectPlayer,
 } from "./features/player/playerSlice";
 import useWindowDimensions from "./features/windowDimensions/windowDimensions";
-import { mapTileType, PlayerType } from "./features/types/types";
+import {
+  mapTileTerrain,
+  mapTileType,
+  PlayerType,
+} from "./features/types/types";
 import {
   getRenderedElementImageName,
   startNewGame,
@@ -98,7 +102,7 @@ function App() {
   obstaclesState.forEach((obstacle, index) => {
     obstacleElements.push(
       <RenderedElement
-        className="Obstacle"
+        className={obstacle.type === mapTileTerrain.rock ? "Obstacle" : "Dirt"}
         key={`obstacle${index}`}
         renderedObject={{
           x: obstacle.x,
@@ -106,7 +110,7 @@ function App() {
           height: obstacle.height,
           width: obstacle.width,
         }}
-        imageName={getRenderedElementImageName(obstacle.type)}
+        imageName={""} //getRenderedElementImageName(obstacle.type)}
       />
     );
   });
