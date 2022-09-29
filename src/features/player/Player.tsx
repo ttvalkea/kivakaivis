@@ -119,6 +119,7 @@ export function Player(props: {
         dispatch(setYSpeed(0));
       } else {
         dispatch(moveUp());
+        dispatch(moveUp());
       }
       emitPlayerPositionUpdate(props.socket, playerState.x, playerState.y);
     } else if (playerState.speedY > 0) {
@@ -127,6 +128,7 @@ export function Player(props: {
       ) {
         dispatch(setYSpeed(0));
       } else {
+        dispatch(moveDown());
         dispatch(moveDown());
       }
       emitPlayerPositionUpdate(props.socket, playerState.x, playerState.y);

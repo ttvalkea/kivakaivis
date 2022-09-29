@@ -62,7 +62,7 @@ export function RenderedElement(props: {
       })`;
     }
 
-    return <div className={props.className} style={style}></div>;
+    return <span className={props.className} style={style}></span>;
   }
   return null; // Element is not in view
 }

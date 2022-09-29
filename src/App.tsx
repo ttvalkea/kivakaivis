@@ -13,6 +13,7 @@ import {
   EMIT_NAME_REMOVE_PLAYER,
   EMIT_NAME_SET_OTHER_PLAYERS_LIST,
   EMIT_NAME_START_NEW_GAME,
+  EMIT_NAME_SET_NEARBY_OBSTACLES,
 } from "./features/gameMechanics/constants";
 import { RenderedElement } from "./features/renderedElement/RenderedElement";
 import {
@@ -80,9 +81,14 @@ function App() {
         }
       );
       newSocket.on(EMIT_NAME_START_NEW_GAME, (mapTiles: mapTileType[]) => {
-        console.log(mapTiles);
         dispatch(setObstacles(mapTiles));
       });
+      newSocket.on(
+        EMIT_NAME_SET_NEARBY_OBSTACLES,
+        (mapTiles: mapTileType[]) => {
+          dispatch(setObstacles(mapTiles));
+        }
+      );
 
       return newSocket;
     };
@@ -110,7 +116,7 @@ function App() {
           height: obstacle.height,
           width: obstacle.width,
         }}
-        imageName={""} //getRenderedElementImageName(obstacle.type)}
+        imageName={""} //TODO: Switch imageName back to this: getRenderedElementImageName(obstacle.type)}
       />
     );
   });
